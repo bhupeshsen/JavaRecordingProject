@@ -71,12 +71,8 @@ public class FlutterAudioRecorder2Plugin {
 
   private boolean hasRecordPermission(){
     // if after [Marshmallow], we need to check permission on runtime
-    if (VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-      return (ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED)
-              && (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
-    } else {
-      return ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
-    }
+    //              && (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+    return (ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED);
   }
 
   /*@Override
@@ -111,21 +107,14 @@ public class FlutterAudioRecorder2Plugin {
         break;
     }
   }*/
-
-  public void handleHasPermission(){
+  public boolean handleHasPermission(){
     if(hasRecordPermission()){
       Log.d(LOG_NAME, "handleHasPermission true");
-      /*if(_result != null) {
-        _result.success(true);
-      }*/
+      return true;
     } else {
       Log.d(LOG_NAME, "handleHasPermission false");
-
-      if (VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_RECORD_AUDIO);
-      } else {
-        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSIONS_REQUEST_RECORD_AUDIO);
-      }
+      ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.RECORD_AUDIO, /*Manifest.permission.WRITE_EXTERNAL_STORAGE*/}, PERMISSIONS_REQUEST_RECORD_AUDIO);
+      return false;
     }
 
   }

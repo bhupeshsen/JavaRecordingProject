@@ -1,7 +1,5 @@
 package com.kiwitech.javarecordingproject;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,12 +20,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            String[] permissions = new String[]{Manifest.permission.RECORD_AUDIO};
-            ActivityCompat.requestPermissions(this, permissions, 10);
-            return;
-        }
-
         FlutterAudioRecorder2Plugin plugin = new FlutterAudioRecorder2Plugin(this);
 
         Button startRecButton = findViewById(R.id.startRecording);
@@ -37,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
         stopRecButton.setEnabled(false);
 
         startRecButton.setOnClickListener(view -> {
+            if (!plugin.handleHasPermission()){
+                return;
+            }
             startRecButton.setEnabled(false);
             playRecButton.setEnabled(false);
             stopRecButton.setEnabled(true);
